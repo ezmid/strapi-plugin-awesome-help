@@ -19,6 +19,11 @@ module.exports = ({ strapi }) => {
         case "float":
         case "decimal":
         case "integer":
+        case "datetime":
+        case "time":
+        case "boolean":
+        case "enumeration":
+        case "json":
           switch (type) {
             case "component":
               item.attributes.push({ fieldName: attributeKey, value: attributeValue, containerType: "component", componentName: componentName });
@@ -37,6 +42,7 @@ module.exports = ({ strapi }) => {
           switch (type) {
             case "default":
               const component = strapi.components[attributeValue.component];
+              console.log(component);
               if (component)
                 getStructure(item, component, "component", attributeKey);
               break;

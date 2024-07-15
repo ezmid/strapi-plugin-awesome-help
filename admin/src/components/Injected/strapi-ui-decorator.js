@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import React, { useEffect, useState } from 'react';
 // Context from Strapi Helper.
 import { useCMEditViewDataManager } from '@strapi/helper-plugin';
 // Css for tooltip component
@@ -68,7 +68,7 @@ export const StrapiUIDecorator = ({ helpItems, enable }) => {
           if (structureField.zoneName)
             createTooltipInZone(structureField);
           else
-            createTooltip(`${structureField.componentName}.${structureField.fieldName}`, structureField);
+            createTooltipForComponent(structureField);
         }
         else
           // field is a single field
@@ -76,6 +76,21 @@ export const StrapiUIDecorator = ({ helpItems, enable }) => {
       }
     }
   };
+  const createTooltipForComponent = (structureField) => {
+    if (modifiedData && _.isArray(modifiedData[structureField.componentName])) {
+      createTooltipForRepeatableComponent(structureField);
+    } else {
+      createTooltip(`${structureField.componentName}.${structureField.fieldName}`, structureField);
+    }
+  }
+  const createTooltipForRepeatableComponent = (structureField) => {
+    const dataArray = modifiedData?.[structureField.componentName];
+    if (_.isArray(dataArray)) {
+      dataArray.forEach((_, index) => {
+        createTooltip(`${structureField.componentName}.${index}.${structureField.fieldName}`, structureField);
+      });
+    }
+  }
   const createTooltipInZone = (structureField) => {
     //field directly accesible in zoneName
     if (!structureField.zoneName.includes("/")) {
