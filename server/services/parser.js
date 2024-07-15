@@ -42,7 +42,6 @@ module.exports = ({ strapi }) => {
           switch (type) {
             case "default":
               const component = strapi.components[attributeValue.component];
-              console.log(component);
               if (component)
                 getStructure(item, component, "component", attributeKey);
               break;
